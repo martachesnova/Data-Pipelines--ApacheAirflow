@@ -5,7 +5,7 @@ They have also noted that the data quality plays a big part when analyses are ex
 
 My task was to create high grade data pipelines that are dynamic and built from reusable tasks. They are monitored and allow easy backfills. Data quality checks are also automated for analysis execution over the data warehouse, to catch any discrepancies in the datasets.
 
-## Project Overview
+# Project Overview
 
 I've created custom operators to perform tasks such as staging the data, filling the data warehouse, and running checks on the data as the final step.
 
@@ -37,7 +37,7 @@ The final operator is used to run checks on the data itself. The operator's main
 <br>
 <hr>
 
-## Datasets
+# Datasets
 The source data resides in S3 and needs to be processed in Sparkify's data warehouse in Amazon Redshift. The source datasets consist of JSON logs that tell about user activity in the application and JSON metadata about the songs the users listen to.
 
 ### Song dataset:
