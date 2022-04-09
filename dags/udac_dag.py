@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import os
+from airflow import conf
 from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators import (StageToRedshiftOperator, LoadFactOperator,
@@ -10,14 +11,17 @@ AWS_KEY = os.environ.get('AWS_KEY')
 AWS_SECRET = os.environ.get('AWS_SECRET')
 
 default_args = {
-    'owner': 'udacity',
-    'start_date': datetime(2019, 1, 12),
+    'owner': 'marta-chesnova',
+    'depends_on_past': False,
+    'start_date': datetime.datetime.now(),
+    'email_on_failure': False,
+    'email_on_retry': False,
     'retries': 3,
 	'retry_delay': timedelta(minutes=5),
 	'catchup': False
 }
 
-dag = DAG('udac_example_dag',
+dag = DAG('udac_dag',
           default_args=default_args,
           description='Load and transform data in Redshift with Airflow',
           schedule_interval='@hourly'
@@ -59,7 +63,8 @@ load_user_dimension_table = LoadDimensionOperator(
     dag=dag,
     redshift_conn_id='redshift',
     dim_table_query=SqlQueries.user_table_insert,
-    destination_table='users'
+    destination_table='users',
+    append_records=False
 )
 
 load_song_dimension_table = LoadDimensionOperator(
@@ -67,7 +72,8 @@ load_song_dimension_table = LoadDimensionOperator(
     dag=dag,
     redshift_conn_id='redshift',
     dim_table_query=SqlQueries.song_table_insert,
-    destination_table='songs'
+    destination_table='songs',
+    append_records=False
 )
 
 load_artist_dimension_table = LoadDimensionOperator(
@@ -75,7 +81,8 @@ load_artist_dimension_table = LoadDimensionOperator(
     dag=dag,
     redshift_conn_id='redshift',
     dim_table_query=SqlQueries.artist_table_insert,
-    destination_table='artists'
+    destination_table='artists',
+    append_records=False
 )
 
 load_time_dimension_table = LoadDimensionOperator(
@@ -83,7 +90,8 @@ load_time_dimension_table = LoadDimensionOperator(
     dag=dag,
     redshift_conn_id='redshift',
     dim_table_query=SqlQueries.time_table_insert,
-    destination_table='time'
+    destination_table='time',
+    append_records=False
 )
 
 run_quality_checks = DataQualityOperator(
